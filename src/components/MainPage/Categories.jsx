@@ -1,4 +1,7 @@
-import React from "react"
+import { useAtom } from "jotai";
+import React, { useEffect, useState } from "react"
+import { isExpandedAtom, selectedCategoryAtom } from "../../lib/atom"; 
+
 
 const Categories = () => {
   const data = [
@@ -48,19 +51,60 @@ const Categories = () => {
     },
   ]
 
+  const [apiCategories, setApiCategories] = useState([]);
+  const [isExpanded, setIsExpanded] = useAtom(isExpandedAtom);
+  const [selectedCategory, setSelectedCategory] = useAtom(selectedCategoryAtom);
+
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await fetch("http://34.229.4.148:3000/category/get");
+      const data = await response.json();
+      setApiCategories(data);
+    };
+
+    fetchCategories();
+  }, []);
+
+  const handleCategoryClick = (categoryName) => {
+    setSelectedCategory(categoryName);
+    console.log("Categoría seleccionada:", categoryName); 
+
+  };
+
+  const mapCategoryToImage = (categoryName) => {
+    const mappings = {
+      "Alimentación": "./images/category/cat10.png", 
+      "Belleza y Salud": "./images/category/cat7.png", 
+      "Deportes": "", 
+      "Hogar y Jardín": "./images/category/cat4.png", 
+      "Juguetes y Bebés": "./images/category/cat9.png", 
+      "Libros y Papelería": "./images/category/cat11.png", 
+      "Mascotas": "./images/category/cat8.png", 
+      "Muebles": "", 
+      "Ropa": "./images/category/cat1.png", 
+      "Tecnología": "./images/category/cat2.png", 
+    };
+
+    return mappings[categoryName] || "path_to_default_image";
+  };
+
   return (
     <>
+    {isExpanded && (
       <div className='category'>
-        {data.map((value, index) => {
+        {apiCategories.map((category, index) => {
+          const imgPath = mapCategoryToImage(category.category_name);
           return (
-            <div className='box f_flex' key={index}>
-              <img src={value.cateImg} alt='' />
-              <span>{value.cateName}</span>
+            <div className='box f_flex' key={index} onClick={() => handleCategoryClick(category.category_name)}>
+              <img src={imgPath} alt={category.category_name} />
+              <span>{category.category_name}</span>
             </div>
           )
         })}
       </div>
-    </>
+    )}
+  </>
   )
 }
 

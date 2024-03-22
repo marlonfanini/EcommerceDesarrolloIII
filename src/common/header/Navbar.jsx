@@ -1,24 +1,34 @@
 import React, { useState } from "react"
 import { Link } from "react-router-dom"
+import ListIcon from '@mui/icons-material/List';
+import { isExpandedAtom } from "../../lib/atom";
+import { useAtom } from "jotai";
 
 const Navbar = () => {
   // Toogle Menu
   const [MobileMenu, setMobileMenu] = useState(false)
+  const [isExpanded, setIsExpanded] = useAtom(isExpandedAtom);
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded); 
+  };
+
+  
   return (
     <>
       <header className='header'>
         <div className='container d_flex'>
-          <div className='catgrories d_flex'>
-            <span class='fa-solid fa-border-all'></span>
+          <div className='catgrories d_flex' style={{cursor: 'pointer'}} onClick={toggleExpand}>
+            <ListIcon sx={{marginTop: '10px', marginRight: '3px'}} />
             <h4>
-              Categories <i className='fa fa-chevron-down'></i>
+            Categorías {isExpanded ? <i className='fa fa-chevron-up'></i> : <i className='fa fa-chevron-down'></i>}
             </h4>
           </div>
 
           <div className='navlink'>
             <ul className={MobileMenu ? "nav-links-MobileMenu" : "link f_flex capitalize"} onClick={() => setMobileMenu(false)}>
               {/*<ul className='link f_flex uppercase {MobileMenu ? "nav-links-MobileMenu" : "nav-links"} onClick={() => setMobileMenu(false)}'>*/}
-              <li>
+              <li onClick={() => window.location.reload()}>
                 <Link to='/'>home</Link>
               </li>
               <li>

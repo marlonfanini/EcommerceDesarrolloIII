@@ -6,7 +6,6 @@ import "slick-carousel/slick/slick-theme.css"
 
 const SlideCard = () => {
   const settings = {
-    dots: true,
     infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -25,7 +24,7 @@ const SlideCard = () => {
                 <div className='left'>
                   <h1>{value.title}</h1>
                   <p>{value.desc}</p>
-                  <button className='btn-primary'>Visit Collections</button>
+                  <button className='btn-primary' style={{backgroundColor: '#F25c05' }}>Visit Collections</button>
                 </div>
                 <div className='right'>
                   <img src={value.cover} alt='' />
